@@ -1,7 +1,47 @@
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AlertMessage from '../../components/AlertMessage/AlertMessage';
+import { SignIn } from '../../services/AuthenticatedService';
 import './Login.css';
 
-const Login = () => {
+const Login = (props) => {
+  const refEmail = useRef(null);
+  const refPassword = useRef(null);
+  const [showAlertMessage, setShowAlertMessage] = useState({
+    show: false,
+    message: '',
+  });
+
+  const handleClickSignIn = async () => {
+    const email = refEmail.current?.value;
+    const password = refPassword.current?.value;
+
+    if (email && password) {
+      const userToLogin = {
+        email,
+        password,
+      };
+
+      const resultSignIn = await SignIn(userToLogin);
+      if (resultSignIn.isAuthenticated) {
+        localStorage.setItem('IS_AUTHENTICATED', resultSignIn.isAuthenticated);
+        localStorage.setItem('USER_DATA', JSON.stringify(resultSignIn.data));
+        props.history.push('/home');
+      } else {
+        setShowAlertMessage({
+          show: true,
+          message: resultSignIn.message,
+        });
+      }
+    } else {
+      setShowAlertMessage({
+        show: true,
+        message:
+          'Debe ingresar un correo y una contraseña para poder ingresar.',
+      });
+    }
+  };
+
   return (
     <div className="body-public">
       <div className="form-signin text-center">
@@ -19,6 +59,7 @@ const Login = () => {
               name="email"
               className="form-control"
               placeholder="email@example.com"
+              ref={refEmail}
             />
             <label htmlFor="email">Correo Electronico</label>
           </div>
@@ -28,14 +69,23 @@ const Login = () => {
               name="password"
               className="form-control"
               placeholder="Contraseña"
+              ref={refPassword}
             />
             <label htmlFor="password">Contraseña</label>
           </div>
           <div className="d-grid gap-2 mx-auto">
-            <button className="btn btn-lg btn-success">Ingresar</button>
+            <button
+              className="btn btn-lg btn-success"
+              onClick={handleClickSignIn}
+            >
+              Ingresar
+            </button>
             <Link className="btn btn-lg btn-primary" to="/register">
               Registrar
             </Link>
+            {showAlertMessage.show ? (
+              <AlertMessage message={showAlertMessage.message} />
+            ) : null}
           </div>
         </div>
       </div>
