@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
 import { SignIn } from '../../services/AuthenticatedService';
+import { validateEmail, validateText } from '../../utils/RegexValidations';
 import './Login.css';
 
 const Login = (props) => {
@@ -42,6 +43,31 @@ const Login = (props) => {
     }
   };
 
+  const handleChangeInput = (e) => {
+    const nameInput = e.target.name;
+    const valueInput = e.target.value;
+
+    const isValid =
+      nameInput === 'email'
+        ? validateEmail(valueInput)
+        : validateText(valueInput);
+    let messageValidation =
+      nameInput === 'email'
+        ? 'El correo no es valido.'
+        : 'La contraseña debe tener minimo 6 caracteres';
+    if (!isValid) {
+      setShowAlertMessage({
+        show: true,
+        message: messageValidation,
+      });
+    } else {
+      setShowAlertMessage({
+        show: false,
+        message: '',
+      });
+    }
+  };
+
   return (
     <div className="body-public">
       <div className="form-signin text-center">
@@ -60,6 +86,7 @@ const Login = (props) => {
               className="form-control"
               placeholder="email@example.com"
               ref={refEmail}
+              onChange={handleChangeInput}
             />
             <label htmlFor="email">Correo Electronico</label>
           </div>
@@ -70,6 +97,7 @@ const Login = (props) => {
               className="form-control"
               placeholder="Contraseña"
               ref={refPassword}
+              onChange={handleChangeInput}
             />
             <label htmlFor="password">Contraseña</label>
           </div>

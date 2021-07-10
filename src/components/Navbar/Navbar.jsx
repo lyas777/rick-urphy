@@ -1,4 +1,14 @@
+import { FaSignOutAlt } from 'react-icons/fa';
+import { useHistory } from 'react-router-dom';
+
 const Navbar = () => {
+  const history = useHistory();
+  const handleClickSignOut = () => {
+    localStorage.removeItem('IS_AUTHENTICATED');
+    localStorage.removeItem('USER_DATA');
+    history.push('/login');
+  };
+
   return (
     <header className="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
       <a className="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="/">
@@ -12,9 +22,9 @@ const Navbar = () => {
       </a>
       <div className="navbar-nav">
         <div className="nav-item text-nowrap">
-          <a className="nav-link px-3" href="/">
-            Salir
-          </a>
+          <p className="nav-link px-3" onClick={handleClickSignOut}>
+            Salir <FaSignOutAlt />
+          </p>
         </div>
       </div>
     </header>
