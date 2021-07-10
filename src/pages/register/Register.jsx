@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
 import { SignUp } from '../../services/AuthenticatedService';
@@ -12,17 +12,16 @@ const Register = () => {
   const refEmail = useRef(null);
   const refPassword = useRef(null);
 
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState({
+    show: false,
+    callback: () => {},
+    title: '',
+    subTitle: '',
+  });
   const [showAlertMessage, setShowAlertMessage] = useState({
     show: false,
     message: '',
   });
-
-  useEffect(() => {
-    return () => {
-      console.log('Saliendo del Compomenete Register');
-    };
-  }, []);
 
   const handleClickRedirectLogin = () => {
     history.push('/login');
@@ -50,7 +49,12 @@ const Register = () => {
         });
       } else {
         if (resultSignUp.data) {
-          setModalIsOpen(true);
+          setModalIsOpen({
+            show: true,
+            title: 'Felicitaciones 😁',
+            subTitle: 'El usuario se registró correctamente.',
+            callback: handleClickRedirectLogin,
+          });
         }
       }
     } else {
@@ -90,11 +94,11 @@ const Register = () => {
 
   return (
     <>
-      {modalIsOpen ? (
+      {modalIsOpen.show ? (
         <Modal
-          onClickRedirectLogin={handleClickRedirectLogin}
-          title="Felicitaciones 😁"
-          subTitle="El usuario se registró correctamente."
+          onClickRedirectLogin={modalIsOpen.callback}
+          title={modalIsOpen.title}
+          subTitle={modalIsOpen.subTitle}
         />
       ) : null}
       <div className="body-public">

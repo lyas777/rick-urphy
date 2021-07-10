@@ -20,6 +20,20 @@
       "email": "jyotun@gmail.com",
       "password": "MTIzNDU2",
       "id": 90720211953
+    },
+    {
+      "firstName": "Emely",
+      "lastName": "Moreno",
+      "email": "emoreno@gmail.com",
+      "password": "MTIzNDU2",
+      "id": 90720211954
+    },
+    {
+      "firstName": "Ricardo",
+      "lastName": "Mendoza",
+      "email": "rmendoza@gmail.com",
+      "password": "MTIzNDU2",
+      "id": 90720211955
     }
   ]
 }
