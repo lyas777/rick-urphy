@@ -1,12 +1,19 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import AlertMessage from '../../components/AlertMessage/AlertMessage';
 import { SignUp } from '../../services/AuthenticatedService';
+import { validateEmail, validateText } from '../../utils/RegexValidations';
 
 const Register = () => {
   const refFirstName = useRef(null);
   const refLastName = useRef(null);
   const refEmail = useRef(null);
   const refPassword = useRef(null);
+
+  const [showAlertMessage, setShowAlertMessage] = useState({
+    show: false,
+    message: '',
+  });
 
   const handleClickSignUp = async () => {
     const firstName = refFirstName.current?.value;
@@ -23,7 +30,48 @@ const Register = () => {
       };
 
       const resultSignUp = await SignUp(userToRegister);
-      console.log(resultSignUp);
+      if (resultSignUp.userExists) {
+        setShowAlertMessage({
+          show: true,
+          message: resultSignUp.message,
+        });
+      } else {
+        if (resultSignUp.data) {
+          console.log(resultSignUp.data);
+        }
+      }
+    } else {
+      setShowAlertMessage({
+        show: true,
+        message:
+          'Debes ingresar tus nombres, apellidos, correo y contraseña para poder regostrar.',
+      });
+    }
+  };
+
+  const handleChangeInput = (e) => {
+    const nameInput = e.target.name;
+    const valueInput = e.target.value;
+
+    const isValid =
+      nameInput === 'email'
+        ? validateEmail(valueInput)
+        : validateText(valueInput);
+
+    const messageValidation =
+      nameInput === 'email'
+        ? 'Debe ingresar un correo válido.'
+        : 'Debe ingresar mas de 6 caracteres.';
+    if (!isValid && valueInput) {
+      setShowAlertMessage({
+        show: true,
+        message: messageValidation,
+      });
+    } else {
+      setShowAlertMessage({
+        show: false,
+        message: '',
+      });
     }
   };
 
@@ -45,6 +93,7 @@ const Register = () => {
               className="form-control"
               placeholder="Nombres"
               ref={refFirstName}
+              onChange={handleChangeInput}
             />
             <label htmlFor="firstName">Nombres</label>
           </div>
@@ -55,6 +104,7 @@ const Register = () => {
               className="form-control"
               placeholder="Apellidos"
               ref={refLastName}
+              onChange={handleChangeInput}
             />
             <label htmlFor="email">Apellidos</label>
           </div>
@@ -65,6 +115,7 @@ const Register = () => {
               className="form-control"
               placeholder="email@example.com"
               ref={refEmail}
+              onChange={handleChangeInput}
             />
             <label htmlFor="email">Correo Electronico</label>
           </div>
@@ -75,6 +126,7 @@ const Register = () => {
               className="form-control"
               placeholder="Contraseña"
               ref={refPassword}
+              onChange={handleChangeInput}
             />
             <label htmlFor="password">Contraseña</label>
           </div>
@@ -89,6 +141,9 @@ const Register = () => {
               Atras
             </Link>
           </div>
+          {showAlertMessage.show ? (
+            <AlertMessage message={showAlertMessage.message} />
+          ) : null}
         </div>
       </div>
     </div>
