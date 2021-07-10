@@ -1,11 +1,13 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
+import ApplicationContext from '../../context/ApplicationContext';
 import { SignIn } from '../../services/AuthenticatedService';
 import { validateEmail, validateText } from '../../utils/RegexValidations';
 import './Login.css';
 
 const Login = (props) => {
+  const { refreshIsAuthenticated } = useContext(ApplicationContext);
   const refEmail = useRef(null);
   const refPassword = useRef(null);
   const [showAlertMessage, setShowAlertMessage] = useState({
@@ -27,7 +29,7 @@ const Login = (props) => {
       if (resultSignIn.isAuthenticated) {
         localStorage.setItem('IS_AUTHENTICATED', resultSignIn.isAuthenticated);
         localStorage.setItem('USER_DATA', JSON.stringify(resultSignIn.data));
-        props.history.push('/home');
+        refreshIsAuthenticated();
       } else {
         setShowAlertMessage({
           show: true,

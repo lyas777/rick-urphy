@@ -1,12 +1,13 @@
+import { useContext } from 'react';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { useHistory } from 'react-router-dom';
+import ApplicationContext from '../../context/ApplicationContext';
 
 const Navbar = () => {
-  const history = useHistory();
+  const { refreshIsAuthenticated } = useContext(ApplicationContext);
   const handleClickSignOut = () => {
     localStorage.removeItem('IS_AUTHENTICATED');
     localStorage.removeItem('USER_DATA');
-    history.push('/login');
+    refreshIsAuthenticated();
   };
 
   return (
