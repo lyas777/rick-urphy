@@ -1,6 +1,19 @@
 import { Link } from 'react-router-dom';
+import { SignUp } from '../../services/AuthenticatedService';
 
 const Register = () => {
+  const handleClickSignUp = async () => {
+    const userToRegister = {
+      firstName: 'Toffee',
+      lastName: 'Albino',
+      email: 'toffee@toffee.com',
+      password: '123456',
+    };
+
+    const resultSignUp = await SignUp(userToRegister);
+    console.log(resultSignUp);
+  };
+
   return (
     <div className="body-public">
       <div className="form-signin text-center">
@@ -49,7 +62,12 @@ const Register = () => {
             <label htmlFor="password">Contraseña</label>
           </div>
           <div className="d-grid gap-2 mx-auto">
-            <button className="btn btn-lg btn-success">Registar</button>
+            <button
+              className="btn btn-lg btn-success"
+              onClick={handleClickSignUp}
+            >
+              Registar
+            </button>
             <Link className="btn btn-lg btn-default" to="/login">
               Atras
             </Link>

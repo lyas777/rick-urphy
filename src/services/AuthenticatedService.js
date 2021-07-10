@@ -35,4 +35,42 @@ const SignIn = async (userToLogin) => {
   return result;
 };
 
-export { SignIn };
+const SignUp = async (userToRegister) => {
+  let result = {};
+  const responseGet = await fetch(API_URL, options);
+  const users = await responseGet.json();
+  const usersFilter = users.filter(
+    (user) => user.email === userToRegister.email
+  );
+  if (usersFilter.length > 0) {
+    result = {
+      error: false,
+      message: 'El correo ingresado ya se encuentra registrado.',
+      userExists: true,
+    };
+  } else {
+    let optionsCreateUser = options;
+    optionsCreateUser = {
+      ...optionsCreateUser,
+      method: 'POST',
+      body: JSON.stringify({
+        ...userToRegister,
+        password: btoa(userToRegister.password),
+      }),
+    };
+
+    const responsePost = await fetch(API_URL, optionsCreateUser);
+    const dataUser = await responsePost.json();
+
+    result = {
+      error: false,
+      userExists: false,
+      data: dataUser,
+      message: '',
+    };
+  }
+
+  return result;
+};
+
+export { SignIn, SignUp };
