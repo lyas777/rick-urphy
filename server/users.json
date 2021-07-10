@@ -8,11 +8,18 @@
       "password": "MTIzNDU2"
     },
     {
-      "firstName": "Carlos",
-      "lastName": "Tovvar",
-      "email": "admin@gmail.com",
+      "firstName": "Alberto",
+      "lastName": "Del Rio",
+      "email": "adelrio@gmail.com",
       "password": "MTIzNDU2",
       "id": 90720211952
+    },
+    {
+      "firstName": "Josimar",
+      "lastName": "Yotun",
+      "email": "jyotun@gmail.com",
+      "password": "MTIzNDU2",
+      "id": 90720211953
     }
   ]
 }
