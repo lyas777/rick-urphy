@@ -1,17 +1,30 @@
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { SignUp } from '../../services/AuthenticatedService';
 
 const Register = () => {
-  const handleClickSignUp = async () => {
-    const userToRegister = {
-      firstName: 'Toffee',
-      lastName: 'Albino',
-      email: 'toffee@toffee.com',
-      password: '123456',
-    };
+  const refFirstName = useRef(null);
+  const refLastName = useRef(null);
+  const refEmail = useRef(null);
+  const refPassword = useRef(null);
 
-    const resultSignUp = await SignUp(userToRegister);
-    console.log(resultSignUp);
+  const handleClickSignUp = async () => {
+    const firstName = refFirstName.current?.value;
+    const lastName = refLastName.current?.value;
+    const email = refEmail.current?.value;
+    const password = refPassword.current?.value;
+
+    if (firstName && lastName && email && password) {
+      const userToRegister = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+
+      const resultSignUp = await SignUp(userToRegister);
+      console.log(resultSignUp);
+    }
   };
 
   return (
@@ -31,6 +44,7 @@ const Register = () => {
               name="firstName"
               className="form-control"
               placeholder="Nombres"
+              ref={refFirstName}
             />
             <label htmlFor="firstName">Nombres</label>
           </div>
@@ -40,6 +54,7 @@ const Register = () => {
               name="lastName"
               className="form-control"
               placeholder="Apellidos"
+              ref={refLastName}
             />
             <label htmlFor="email">Apellidos</label>
           </div>
@@ -49,6 +64,7 @@ const Register = () => {
               name="email"
               className="form-control"
               placeholder="email@example.com"
+              ref={refEmail}
             />
             <label htmlFor="email">Correo Electronico</label>
           </div>
@@ -58,6 +74,7 @@ const Register = () => {
               name="password"
               className="form-control"
               placeholder="Contraseña"
+              ref={refPassword}
             />
             <label htmlFor="password">Contraseña</label>
           </div>
