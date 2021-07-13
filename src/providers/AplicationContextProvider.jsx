@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import ApplicationContext from '../context/ApplicationContext';
 
-const ApplicationContextProvider = ({ children }) => {
+const ApplicationContextProvider = (props) => {
   const [isAuthenticated, setIsAuthenticated] = useState(
     !!localStorage.getItem('IS_AUTHENTICATED')
   );
@@ -17,7 +17,7 @@ const ApplicationContextProvider = ({ children }) => {
 
   return (
     <ApplicationContext.Provider value={applicationContextValues}>
-      {children}
+      {props.children}
     </ApplicationContext.Provider>
   );
 };
