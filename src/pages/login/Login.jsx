@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
 import ApplicationContext from '../../context/ApplicationContext';
@@ -6,14 +6,17 @@ import { SignIn } from '../../services/AuthenticatedService';
 import { validateEmail, validateText } from '../../utils/RegexValidations';
 import './Login.css';
 
-const Login = (props) => {
-  const { refreshIsAuthenticated } = useContext(ApplicationContext);
+const Login = () => {
+  const { refreshIsAuthenticated, showAlertMessage, refreshShowAlertMessage } =
+    useContext(ApplicationContext);
   const refEmail = useRef(null);
   const refPassword = useRef(null);
-  const [showAlertMessage, setShowAlertMessage] = useState({
-    show: false,
-    message: '',
-  });
+
+  useEffect(() => {
+    return () => {
+      refreshShowAlertMessage({ visibility: false, message: '' });
+    };
+  }, []);
 
   const handleClickSignIn = async () => {
     const email = refEmail.current?.value;
@@ -31,14 +34,14 @@ const Login = (props) => {
         localStorage.setItem('USER_DATA', JSON.stringify(resultSignIn.data));
         refreshIsAuthenticated();
       } else {
-        setShowAlertMessage({
-          show: true,
+        refreshShowAlertMessage({
+          visibility: true,
           message: resultSignIn.message,
         });
       }
     } else {
-      setShowAlertMessage({
-        show: true,
+      refreshShowAlertMessage({
+        visibility: true,
         message:
           'Debe ingresar un correo y una contraseña para poder ingresar.',
       });
@@ -58,13 +61,13 @@ const Login = (props) => {
         ? 'El correo no es valido.'
         : 'La contraseña debe tener minimo 6 caracteres';
     if (!isValid) {
-      setShowAlertMessage({
-        show: true,
+      refreshShowAlertMessage({
+        visibility: true,
         message: messageValidation,
       });
     } else {
-      setShowAlertMessage({
-        show: false,
+      refreshShowAlertMessage({
+        visibility: false,
         message: '',
       });
     }
@@ -113,7 +116,7 @@ const Login = (props) => {
             <Link className="btn btn-lg btn-primary" to="/register">
               Registrar
             </Link>
-            {showAlertMessage.show ? (
+            {showAlertMessage.visibility ? (
               <AlertMessage message={showAlertMessage.message} />
             ) : null}
           </div>

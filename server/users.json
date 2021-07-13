@@ -8,32 +8,11 @@
       "password": "MTIzNDU2"
     },
     {
-      "firstName": "Alberto",
-      "lastName": "Del Rio",
-      "email": "adelrio@gmail.com",
+      "firstName": "administrator",
+      "lastName": "administrator",
+      "email": "administrator@mail.com",
       "password": "MTIzNDU2",
       "id": 90720211952
-    },
-    {
-      "firstName": "Josimar",
-      "lastName": "Yotun",
-      "email": "jyotun@gmail.com",
-      "password": "MTIzNDU2",
-      "id": 90720211953
-    },
-    {
-      "firstName": "Emely",
-      "lastName": "Moreno",
-      "email": "emoreno@gmail.com",
-      "password": "MTIzNDU2",
-      "id": 90720211954
-    },
-    {
-      "firstName": "Ricardo",
-      "lastName": "Mendoza",
-      "email": "rmendoza@gmail.com",
-      "password": "MTIzNDU2",
-      "id": 90720211955
     }
   ]
 }
