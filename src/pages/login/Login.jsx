@@ -32,6 +32,7 @@ const Login = () => {
       if (resultSignIn.isAuthenticated) {
         localStorage.setItem('IS_AUTHENTICATED', resultSignIn.isAuthenticated);
         localStorage.setItem('USER_DATA', JSON.stringify(resultSignIn.data));
+        localStorage.setItem('USER_ID', resultSignIn.data.id);
         refreshIsAuthenticated();
       } else {
         refreshShowAlertMessage({

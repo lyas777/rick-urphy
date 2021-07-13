@@ -1,3 +1,5 @@
+import md5 from 'md5';
+
 const API_URL = 'http://localhost:3027/users';
 const options = {
   headers: {
@@ -73,4 +75,21 @@ const SignUp = async (userToRegister) => {
   return result;
 };
 
-export { SignIn, SignUp };
+const GetUserById = async (id) => {
+  const responseGet = await fetch(`${API_URL}/${id}`, options);
+  const userData = await responseGet.json();
+  userData.photoUrl = `https://www.gravatar.com/avatar/${md5(userData.email)}`;
+  return userData;
+};
+
+const UpdateUser = async (id, userToUpdate) => {
+  const optionsUpdate = options;
+  optionsUpdate.method = 'PUT';
+  optionsUpdate.body = JSON.stringify(userToUpdate);
+  const responseUpdate = await fetch(`${API_URL}/${id}`, optionsUpdate);
+  const userUpdate = await responseUpdate.json();
+
+  return userUpdate;
+};
+
+export { SignIn, SignUp, GetUserById, UpdateUser };
