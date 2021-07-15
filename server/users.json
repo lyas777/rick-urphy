@@ -4,8 +4,9 @@
       "id": 90720211951,
       "firstName": "Admin",
       "lastName": "Admin",
-      "email": "admin@admin.com",
-      "password": "MTIzNDU2"
+      "email": "srdelarosab@gmail.com",
+      "password": "MTIzNDU2",
+      "photoUrl": "https://www.gravatar.com/avatar/a16f4359e377626bdf15bf88b83c41a6"
     },
     {
       "firstName": "administrator",
@@ -13,6 +14,13 @@
       "email": "administrator@mail.com",
       "password": "MTIzNDU2",
       "id": 90720211952
+    },
+    {
+      "firstName": "Felipe",
+      "lastName": "Romero",
+      "email": "fromero@gmail.com",
+      "password": "MTIzNDU2",
+      "id": 90720211953
     }
   ]
 }
