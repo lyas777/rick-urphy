@@ -7,6 +7,7 @@ const Navbar = () => {
   const handleClickSignOut = () => {
     localStorage.removeItem('IS_AUTHENTICATED');
     localStorage.removeItem('USER_DATA');
+    localStorage.removeItem('USER_ID');
     refreshIsAuthenticated();
   };
 

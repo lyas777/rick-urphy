@@ -21,6 +21,13 @@
       "email": "fromero@gmail.com",
       "password": "MTIzNDU2",
       "id": 90720211953
+    },
+    {
+      "firstName": "Rick",
+      "lastName": "Sanchez",
+      "email": "rsanchez@gmail.com",
+      "password": "MTIzNDU2",
+      "id": 90720211954
     }
   ]
 }
