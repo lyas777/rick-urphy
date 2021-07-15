@@ -1,8 +1,11 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import md5 from 'md5';
+import ApplicationContext from '../../context/ApplicationContext';
 import { GetUserById, UpdateUser } from '../../services/AuthenticatedService';
+import Modal from '../../components/Modal/Modal';
 
 const Profile = () => {
+  const { modalIsOpen, refreshModalIsOpen } = useContext(ApplicationContext);
   const [userData, setUserData] = useState(undefined);
   const loadDataCurrentUser = async () => {
     const currentUserId = localStorage.getItem('USER_ID');
@@ -28,7 +31,14 @@ const Profile = () => {
   const handleSaveUserData = async () => {
     const currentUserId = localStorage.getItem('USER_ID');
     const resultUpdate = await UpdateUser(currentUserId, userData);
-    console.log(resultUpdate);
+    if (resultUpdate) {
+      refreshModalIsOpen({
+        visibility: true,
+        title: 'Mensaje',
+        subTitle: 'Información actualizada correctamente.😎',
+        callback: () => refreshModalIsOpen({ visibility: false }),
+      });
+    }
   };
 
   useEffect(() => {
@@ -37,6 +47,13 @@ const Profile = () => {
 
   return (
     <>
+      {modalIsOpen.visibility ? (
+        <Modal
+          title={modalIsOpen.title}
+          subTitle={modalIsOpen.subTitle}
+          callback={modalIsOpen.callback}
+        />
+      ) : null}
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 className="h2">Perfil</h1>
       </div>

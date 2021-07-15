@@ -99,7 +99,7 @@ const Register = () => {
     <>
       {modalIsOpen.visibility ? (
         <Modal
-          onClickRedirectLogin={modalIsOpen.callback}
+          callback={modalIsOpen.callback}
           title={modalIsOpen.title}
           subTitle={modalIsOpen.subTitle}
         />
