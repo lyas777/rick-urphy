@@ -1,30 +1,24 @@
-import { useContext, useRef, useState, useEffect } from 'react';
+import { useRef } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
 import { SignUp } from '../../services/AuthenticatedService';
 import { validateEmail, validateText } from '../../utils/RegexValidations';
 import Modal from '../../components/Modal/Modal';
-import ApplicationContext from '../../context/ApplicationContext';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  actionAlertMessage,
+  actionModal,
+} from '../../actions/applicationAction';
 
 const Register = () => {
-  const {
-    showAlertMessage,
-    refreshShowAlertMessage,
-    modalIsOpen,
-    refreshModalIsOpen,
-  } = useContext(ApplicationContext);
+  const dispatch = useDispatch();
+  const alertMessage = useSelector((state) => state.alertMessage);
+  const modal = useSelector((state) => state.modal);
   const history = useHistory();
   const refFirstName = useRef(null);
   const refLastName = useRef(null);
   const refEmail = useRef(null);
   const refPassword = useRef(null);
-
-  useEffect(() => {
-    return () => {
-      refreshShowAlertMessage({ visibility: false });
-      refreshModalIsOpen({ visibility: false });
-    };
-  }, []);
 
   const handleClickRedirectLogin = () => {
     history.push('/login');
@@ -46,26 +40,26 @@ const Register = () => {
 
       const resultSignUp = await SignUp(userToRegister);
       if (resultSignUp.userExists) {
-        refreshShowAlertMessage({
-          visibility: true,
-          message: resultSignUp.message,
-        });
+        dispatch(actionAlertMessage(true, resultSignUp.message));
       } else {
         if (resultSignUp.data) {
-          refreshModalIsOpen({
-            visibility: true,
-            title: 'Felicitaciones 😁',
-            subTitle: 'El usuario se registró correctamente.',
-            callback: handleClickRedirectLogin,
-          });
+          dispatch(
+            actionModal(
+              true,
+              handleClickRedirectLogin,
+              'Felicitaciones 😁',
+              'El usuario se registró correctamente.'
+            )
+          );
         }
       }
     } else {
-      refreshShowAlertMessage({
-        visibility: true,
-        message:
-          'Debes ingresar tus nombres, apellidos, correo y contraseña para poder regostrar.',
-      });
+      dispatch(
+        actionAlertMessage(
+          true,
+          'Debes ingresar tus nombres, apellidos, correo y contraseña para poder regostrar.'
+        )
+      );
     }
   };
 
@@ -83,25 +77,19 @@ const Register = () => {
         ? 'Debe ingresar un correo válido.'
         : 'Debe ingresar mas de 6 caracteres.';
     if (!isValid && valueInput) {
-      refreshShowAlertMessage({
-        visibility: true,
-        message: messageValidation,
-      });
+      dispatch(actionAlertMessage(true, messageValidation));
     } else {
-      refreshShowAlertMessage({
-        visibility: false,
-        message: '',
-      });
+      dispatch(actionAlertMessage());
     }
   };
 
   return (
     <>
-      {modalIsOpen.visibility ? (
+      {modal.visibility ? (
         <Modal
-          callback={modalIsOpen.callback}
-          title={modalIsOpen.title}
-          subTitle={modalIsOpen.subTitle}
+          callback={modal.callback}
+          title={modal.title}
+          subTitle={modal.subTitle}
         />
       ) : null}
       <div className="body-public">
@@ -169,8 +157,8 @@ const Register = () => {
                 Atras
               </Link>
             </div>
-            {showAlertMessage.visibility ? (
-              <AlertMessage message={showAlertMessage.message} />
+            {alertMessage.visibility ? (
+              <AlertMessage message={alertMessage.message} />
             ) : null}
           </div>
         </div>

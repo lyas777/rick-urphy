@@ -1,22 +1,20 @@
-import { useContext, useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
-import ApplicationContext from '../../context/ApplicationContext';
 import { SignIn } from '../../services/AuthenticatedService';
 import { validateEmail, validateText } from '../../utils/RegexValidations';
+import {
+  actionIsAuthenticated,
+  actionAlertMessage,
+} from '../../actions/applicationAction';
 import './Login.css';
 
 const Login = () => {
-  const { refreshIsAuthenticated, showAlertMessage, refreshShowAlertMessage } =
-    useContext(ApplicationContext);
+  const dispatch = useDispatch();
+  const alertMessage = useSelector((state) => state.alertMessage);
   const refEmail = useRef(null);
   const refPassword = useRef(null);
-
-  useEffect(() => {
-    return () => {
-      refreshShowAlertMessage({ visibility: false, message: '' });
-    };
-  }, []);
 
   const handleClickSignIn = async () => {
     const email = refEmail.current?.value;
@@ -33,19 +31,17 @@ const Login = () => {
         localStorage.setItem('IS_AUTHENTICATED', resultSignIn.isAuthenticated);
         localStorage.setItem('USER_DATA', JSON.stringify(resultSignIn.data));
         localStorage.setItem('USER_ID', resultSignIn.data.id);
-        refreshIsAuthenticated();
+        dispatch(actionIsAuthenticated());
       } else {
-        refreshShowAlertMessage({
-          visibility: true,
-          message: resultSignIn.message,
-        });
+        dispatch(actionAlertMessage(true, resultSignIn.message));
       }
     } else {
-      refreshShowAlertMessage({
-        visibility: true,
-        message:
-          'Debe ingresar un correo y una contraseña para poder ingresar.',
-      });
+      dispatch(
+        actionAlertMessage(
+          true,
+          'Debe ingresar un correo y una contraseña para poder ingresar.'
+        )
+      );
     }
   };
 
@@ -62,15 +58,9 @@ const Login = () => {
         ? 'El correo no es valido.'
         : 'La contraseña debe tener minimo 6 caracteres';
     if (!isValid) {
-      refreshShowAlertMessage({
-        visibility: true,
-        message: messageValidation,
-      });
+      dispatch(actionAlertMessage(true, messageValidation));
     } else {
-      refreshShowAlertMessage({
-        visibility: false,
-        message: '',
-      });
+      dispatch(actionAlertMessage());
     }
   };
 
@@ -117,8 +107,8 @@ const Login = () => {
             <Link className="btn btn-lg btn-primary" to="/register">
               Registrar
             </Link>
-            {showAlertMessage.visibility ? (
-              <AlertMessage message={showAlertMessage.message} />
+            {alertMessage.visibility ? (
+              <AlertMessage message={alertMessage.message} />
             ) : null}
           </div>
         </div>

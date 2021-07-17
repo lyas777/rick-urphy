@@ -1,11 +1,13 @@
-import { useContext, useEffect, useState } from 'react';
 import md5 from 'md5';
-import ApplicationContext from '../../context/ApplicationContext';
 import { GetUserById, UpdateUser } from '../../services/AuthenticatedService';
 import Modal from '../../components/Modal/Modal';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { actionModal } from '../../actions/applicationAction';
 
 const Profile = () => {
-  const { modalIsOpen, refreshModalIsOpen } = useContext(ApplicationContext);
+  const dispatch = useDispatch();
+  const modal = useSelector((state) => state.modal);
   const [userData, setUserData] = useState(undefined);
   const loadDataCurrentUser = async () => {
     const currentUserId = localStorage.getItem('USER_ID');
@@ -28,16 +30,22 @@ const Profile = () => {
     }
   };
 
+  const closeModal = () => {
+    dispatch(actionModal());
+  };
+
   const handleSaveUserData = async () => {
     const currentUserId = localStorage.getItem('USER_ID');
     const resultUpdate = await UpdateUser(currentUserId, userData);
     if (resultUpdate) {
-      refreshModalIsOpen({
-        visibility: true,
-        title: 'Mensaje',
-        subTitle: 'Información actualizada correctamente.😎',
-        callback: () => refreshModalIsOpen({ visibility: false }),
-      });
+      dispatch(
+        actionModal(
+          true,
+          closeModal,
+          'Mensaje',
+          'Información actualizada correctamente.😎'
+        )
+      );
     }
   };
 
@@ -47,11 +55,11 @@ const Profile = () => {
 
   return (
     <>
-      {modalIsOpen.visibility ? (
+      {modal.visibility ? (
         <Modal
-          title={modalIsOpen.title}
-          subTitle={modalIsOpen.subTitle}
-          callback={modalIsOpen.callback}
+          title={modal.title}
+          subTitle={modal.subTitle}
+          callback={modal.callback}
         />
       ) : null}
       <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">

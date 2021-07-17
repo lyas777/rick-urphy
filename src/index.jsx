@@ -2,11 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 import App from './App';
-import ApplicationContextProvider from './providers/AplicationContextProvider';
+import { Provider } from 'react-redux';
+import applicationStore from './store/applicationStore';
 
 ReactDOM.render(
-  <ApplicationContextProvider>
+  <Provider store={applicationStore}>
     <App />
-  </ApplicationContextProvider>,
+  </Provider>,
   document.getElementById('app')
 );

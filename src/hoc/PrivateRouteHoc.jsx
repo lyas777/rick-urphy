@@ -1,10 +1,9 @@
-import { useContext } from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import ApplicationContext from '../context/ApplicationContext';
+import { useSelector } from 'react-redux';
 import Layout from '../components/Layout/Layout';
 
 const PrivateRouteHoc = ({ component: Component, path }) => {
-  const { isAuthenticated } = useContext(ApplicationContext);
+  const isAuthenticated = useSelector((state) => state.isAuthenticated);
   return (
     <Route
       exact
