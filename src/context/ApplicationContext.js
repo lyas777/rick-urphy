@@ -5,7 +5,7 @@ const ApplicationContext = createContext({
   refreshIsAuthenticated: () => {},
   showAlertMessage: {},
   refreshShowAlertMessage: () => {},
-  modalIsOpen: false,
+  modalIsOpen: {},
   refreshModalIsOpen: () => {},
 });
 

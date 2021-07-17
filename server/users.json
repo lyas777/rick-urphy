@@ -2,32 +2,11 @@
   "users": [
     {
       "id": 90720211951,
-      "firstName": "Renato",
-      "lastName": "De la Rosa",
-      "email": "srdelarosab@gmail.com",
+      "firstName": "Juan",
+      "lastName": "Torres",
+      "email": "admin@gmail.com",
       "password": "MTIzNDU2",
-      "photoUrl": "https://www.gravatar.com/avatar/a16f4359e377626bdf15bf88b83c41a6"
-    },
-    {
-      "firstName": "administrator",
-      "lastName": "administrator",
-      "email": "administrator@mail.com",
-      "password": "MTIzNDU2",
-      "id": 90720211952
-    },
-    {
-      "firstName": "Felipe",
-      "lastName": "Romero",
-      "email": "fromero@gmail.com",
-      "password": "MTIzNDU2",
-      "id": 90720211953
-    },
-    {
-      "firstName": "Rick",
-      "lastName": "Sanchez",
-      "email": "rsanchez@gmail.com",
-      "password": "MTIzNDU2",
-      "id": 90720211954
+      "photoUrl": "https://www.gravatar.com/avatar/75d23af433e0cea4c0e45a56dba18b30"
     }
   ]
 }
