@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
@@ -44,6 +44,12 @@ const Login = () => {
       );
     }
   };
+
+  useEffect(() => {
+    return () => {
+      dispatch(actionAlertMessage());
+    };
+  }, [dispatch]);
 
   const handleChangeInput = (e) => {
     const nameInput = e.target.name;

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import AlertMessage from '../../components/AlertMessage/AlertMessage';
 import { SignUp } from '../../services/AuthenticatedService';
@@ -19,6 +19,13 @@ const Register = () => {
   const refLastName = useRef(null);
   const refEmail = useRef(null);
   const refPassword = useRef(null);
+
+  useEffect(() => {
+    return () => {
+      dispatch(actionAlertMessage());
+      dispatch(actionModal());
+    };
+  }, [dispatch]);
 
   const handleClickRedirectLogin = () => {
     history.push('/login');
