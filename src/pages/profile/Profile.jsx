@@ -1,32 +1,56 @@
-import md5 from 'md5';
-import { GetUserById, UpdateUser } from '../../services/AuthenticatedService';
-import Modal from '../../components/Modal/Modal';
-import { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { actionModal } from '../../actions/applicationAction';
+import md5 from "md5";
+import { GetUserById, UpdateUser } from "../../services/AuthenticatedService";
+import Modal from "../../components/Modal/Modal";
+import { useRef, useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { actionModal } from "../../actions/applicationAction";
+import { validateEmail, validateText } from "../../utils/RegexValidations";
+import { actionAlertMessage } from "../../actions/applicationAction";
+import AlertMessage from "../../components/AlertMessage/AlertMessage";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const alertMessage = useSelector((state) => state.alertMessage);
   const modal = useSelector((state) => state.modal);
   const [userData, setUserData] = useState(undefined);
   const loadDataCurrentUser = async () => {
-    const currentUserId = localStorage.getItem('USER_ID');
+    const currentUserId = localStorage.getItem("USER_ID");
     const currentUser = await GetUserById(currentUserId);
     setUserData(currentUser);
   };
+  const refEmail = useRef(null);
+  const refFirstName = useRef(null);
+  const refLastName = useRef(null);
+  const refPassword = useRef(null);
 
   const handleChangeInput = (e) => {
-    if (e.target.name === 'email') {
+    const nameInput = e.target.name;
+    const valueInput = e.target.value;
+
+    if (nameInput === "email") {
       setUserData({
         ...userData,
-        photoUrl: `https://www.gravatar.com/avatar/${md5(e.target.value)}`,
-        [e.target.name]: e.target.value,
+        photoUrl: `https://www.gravatar.com/avatar/${md5(valueInput)}`,
+        [nameInput]: valueInput,
       });
     } else {
       setUserData({
         ...userData,
-        [e.target.name]: e.target.value,
+        [nameInput]: valueInput,
       });
+    }
+    const isValid =
+      nameInput === "email"
+        ? validateEmail(valueInput)
+        : validateText(valueInput);
+    let messageValidation =
+      nameInput === "email"
+        ? "El correo no es valido."
+        : "Debe ingresar mas de 6 caracteres.";
+    if (!isValid) {
+      dispatch(actionAlertMessage(true, messageValidation));
+    } else {
+      dispatch(actionAlertMessage());
     }
   };
 
@@ -35,15 +59,29 @@ const Profile = () => {
   };
 
   const handleSaveUserData = async () => {
-    const currentUserId = localStorage.getItem('USER_ID');
-    const resultUpdate = await UpdateUser(currentUserId, userData);
+    const currentUserId = localStorage.getItem("USER_ID");
+    const firstName = refFirstName.current?.value;
+    const lastName = refLastName.current?.value;
+    const email = refEmail.current?.value;
+    const password = btoa(refPassword.current?.value);
+    let userDataUpdate = {};
+
+    if (firstName && lastName && email && password) {
+      userDataUpdate = {
+        firstName,
+        lastName,
+        email,
+        password,
+      };
+    }
+    const resultUpdate = await UpdateUser(currentUserId, userDataUpdate);
     if (resultUpdate) {
       dispatch(
         actionModal(
           true,
           closeModal,
-          'Mensaje',
-          'Información actualizada correctamente.😎'
+          "Mensaje",
+          "Información actualizada correctamente.😎"
         )
       );
     }
@@ -51,7 +89,8 @@ const Profile = () => {
 
   useEffect(() => {
     loadDataCurrentUser();
-  }, []);
+    dispatch(actionAlertMessage());
+  }, [dispatch]);
 
   return (
     <>
@@ -102,8 +141,9 @@ const Profile = () => {
                       <input
                         type="text"
                         name="firstName"
-                        className="form-control"
                         value={userData.firstName}
+                        className="form-control"
+                        ref={refFirstName}
                         onChange={handleChangeInput}
                       />
                     </div>
@@ -116,8 +156,9 @@ const Profile = () => {
                       <input
                         type="text"
                         name="lastName"
-                        className="form-control"
                         value={userData.lastName}
+                        className="form-control"
+                        ref={refLastName}
                         onChange={handleChangeInput}
                       />
                     </div>
@@ -130,8 +171,24 @@ const Profile = () => {
                       <input
                         type="email"
                         name="email"
-                        className="form-control"
                         value={userData.email}
+                        className="form-control"
+                        ref={refEmail}
+                        onChange={handleChangeInput}
+                      />
+                    </div>
+                  </div>
+                  <div className="row mb-2">
+                    <div className="col-sm-3">
+                      <h6 className="mb-0">Contraseña</h6>
+                    </div>
+                    <div className="col-sm-9 text-secondary">
+                      <input
+                        type="password"
+                        name="password"
+                        value={userData.password}
+                        className="form-control"
+                        ref={refPassword}
                         onChange={handleChangeInput}
                       />
                     </div>
@@ -140,12 +197,16 @@ const Profile = () => {
               </div>
             </div>
           </div>
+          {alertMessage.visibility ? (
+            <AlertMessage message={alertMessage.message} />
+          ) : null}
           <br />
           <div className="row">
             <div className="col">
               <button
                 className="btn btn-lg btn-success float-end"
                 onClick={handleSaveUserData}
+                disabled={alertMessage.visibility}
               >
                 Guardar
               </button>

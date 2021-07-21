@@ -1,7 +1,7 @@
-import axios from 'axios';
-import md5 from 'md5';
+import axios from "axios";
+import md5 from "md5";
 
-const API_URL = 'http://localhost:3027/users';
+const API_URL = "http://localhost:3027/users";
 
 const SignIn = async (userToLogin) => {
   const responseUsers = await axios.get(API_URL);
@@ -17,14 +17,14 @@ const SignIn = async (userToLogin) => {
   if (userFilter.length > 0) {
     result = {
       isAuthenticated: true,
-      message: '',
+      message: "",
       error: false,
       data: userFilter[0],
     };
   } else {
     result = {
       isAuthenticated: false,
-      message: 'Usuario y/o contraseña incorrecta.',
+      message: "Usuario y/o contraseña incorrecta.",
       error: false,
     };
   }
@@ -42,7 +42,7 @@ const SignUp = async (userToRegister) => {
   if (usersFilter.length > 0) {
     result = {
       error: false,
-      message: 'El correo ingresado ya se encuentra registrado.',
+      message: "El correo ingresado ya se encuentra registrado.",
       userExists: true,
     };
   } else {
@@ -56,7 +56,7 @@ const SignUp = async (userToRegister) => {
       error: false,
       userExists: false,
       data: dataUser,
-      message: '',
+      message: "",
     };
   }
 

@@ -1,17 +1,17 @@
-import { createStore } from 'redux';
-import applicationReducer from '../reducers/applicationReducer';
+import { createStore } from "redux";
+import applicationReducer from "../reducers/applicationReducer";
 
 const initialState = {
-  isAuthenticated: !!localStorage.getItem('IS_AUTHENTICATED'),
+  isAuthenticated: !!localStorage.getItem("IS_AUTHENTICATED"),
   alertMessage: {
     visibility: false,
-    message: '',
+    message: "",
   },
   modal: {
     visibility: false,
     callback: () => {},
-    title: '',
-    subTitle: '',
+    title: "",
+    subTitle: "",
   },
 };
 
