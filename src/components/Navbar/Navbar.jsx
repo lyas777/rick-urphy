@@ -1,13 +1,13 @@
-import { FaSignOutAlt } from 'react-icons/fa';
-import { useDispatch } from 'react-redux';
-import { actionIsAuthenticated } from '../../actions/applicationAction';
+import { FaSignOutAlt } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { actionIsAuthenticated } from "../../actions/applicationAction";
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const handleClickSignOut = () => {
-    localStorage.removeItem('IS_AUTHENTICATED');
-    localStorage.removeItem('USER_DATA');
-    localStorage.removeItem('USER_ID');
+    localStorage.removeItem("IS_AUTHENTICATED");
+    localStorage.removeItem("USER_DATA");
+    localStorage.removeItem("USER_ID");
     dispatch(actionIsAuthenticated());
   };
 
